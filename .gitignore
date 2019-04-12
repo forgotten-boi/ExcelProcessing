@@ -3,3 +3,8 @@
 ################################################################################
 
 /WebApplication1/obj/Debug
+/WebApplication1/ExcelProcessor.csproj.user
+/WebApplication1/bin
+/WebApplication1
+/packages
+/.vs/WebApplication1
