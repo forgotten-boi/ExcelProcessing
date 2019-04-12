@@ -62,13 +62,33 @@ namespace WebApplication1.Models
             }
             string filteredFile = "";
 
+            HSSFWorkbook hSSFWorkbook = new HSSFWorkbook();
+            hSSFWorkbook.CreateSheet("FirstSheet");
+            var filteredSheet = hSSFWorkbook.GetSheet("FirstSheet");
+
             for (int row = 0; row <= sheet.LastRowNum; row++) //Loop the records upto filled row  
             {
+             
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells   
                 {
+                    var rowData = filteredSheet.CreateRow(row + 1);
+                    rowData = sheet.GetRow(row);
+                    
                     string value = sheet.GetRow(row).GetCell(0).StringCellValue; //Here for sample , I just save the value in "value" field, Here you can write your custom logics...  
                 }
             }
+
+            filteredSheet.Workbook.Close();
+            var exportPath = filePath + "/Export";
+            if (!Directory.Exists(exportPath))
+            {
+                Directory.CreateDirectory(exportPath);
+            }
+            FileStream xfile = new FileStream(Path.Combine(exportPath, filename + "_Exported"), FileMode.Create, System.IO.FileAccess.Write);
+            hSSFWorkbook.Write(xfile);
+            xfile.Close();
+
+
 
             return filteredFile;
             //return Json(true, JsonRequestBehavior.AllowGet); //return true to display the success message  
