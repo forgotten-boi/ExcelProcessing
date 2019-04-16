@@ -5,7 +5,7 @@ using System.Web;
 using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
 
-namespace WebApplication1.Models
+namespace ExcelProcessor.Models
 {
     public class ExcelFile
     {
@@ -33,7 +33,7 @@ namespace WebApplication1.Models
         }
          public string[,] ReadMultiCell(int starti, int endi, int startj, int endj)
         {
-            Range range = (Range)workSheet.Range[workSheet.Cells[starti, startj], workSheet.Cells[endi,endj]]
+            Range range = (Range)workSheet.Range[workSheet.Cells[starti, startj], workSheet.Cells[endi, endj]];
             object[,] holder = range.Value2;
             string[,] returnString = new string[endi - starti, endj = startj];
             for(int x=1; x<=endi-starti; x++)

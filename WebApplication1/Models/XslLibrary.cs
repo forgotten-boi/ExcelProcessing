@@ -8,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Models
+namespace ExcelProcessor.Models
 {
-    public class XslLibrary
+    public static class XslLibrary
     {
-        internal DataTable ReadDataTable(string path1, string extension)
+        internal static DataTable ReadDataTable(string path1)
         {
+            var extension = Path.GetExtension(path1);
             var dt = new DataTable();
             string connString = "";
             //add different connection string for different types of excel
@@ -38,12 +39,13 @@ namespace WebApplication1.Models
             return dt;
         }
 
-        internal string ImportFromExcelNpoi(string filePath)
+        internal static string ImportFromExcelNpoi(string filePath)
         {
             ISheet sheet; //Create the ISheet object to read the sheet cell values  
             string filename = Path.GetFileName(filePath); //get the uploaded file name  
 
             var fileExt = Path.GetExtension(filename); //get the extension of uploaded excel file  
+        
             using (StreamReader sr = new StreamReader(filePath))
             {
                 if (fileExt == ".xls")
@@ -65,16 +67,17 @@ namespace WebApplication1.Models
             HSSFWorkbook hSSFWorkbook = new HSSFWorkbook();
             hSSFWorkbook.CreateSheet("FirstSheet");
             var filteredSheet = hSSFWorkbook.GetSheet("FirstSheet");
+            
 
-            for (int row = 0; row <= sheet.LastRowNum; row++) //Loop the records upto filled row  
+            for (int row = 2; row <= sheet.LastRowNum; row++) //Loop the records upto filled row  
             {
              
-                if (sheet.GetRow(row) != null) //null is when the row only contains empty cells   
+                if (sheet.GetRow(row) != null && sheet.GetRow(row).GetCell(3).StringCellValue == "EA") //null is when the row only contains empty cells   
                 {
                     var rowData = filteredSheet.CreateRow(row + 1);
                     rowData = sheet.GetRow(row);
                     
-                    string value = sheet.GetRow(row).GetCell(0).StringCellValue; //Here for sample , I just save the value in "value" field, Here you can write your custom logics...  
+                    string value = sheet.GetRow(row).GetCell(3).StringCellValue; //Here for sample , I just save the value in "value" field, Here you can write your custom logics...  
                 }
             }
 
@@ -96,7 +99,7 @@ namespace WebApplication1.Models
 
 
 
-        internal void XslReader(string filePath)
+        internal static void XslReader(string filePath)
         {
             HSSFWorkbook hssfwb;
             using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -105,11 +108,12 @@ namespace WebApplication1.Models
             }
 
             ISheet sheet = hssfwb.GetSheet("Arkusz1");
+
             for (int row = 0; row <= sheet.LastRowNum; row++)
             {
                 if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
                 {
-
+                    Console.WriteLine(sheet.GetRow(row).GetCell(0));
                     //MessageBox.Show(string.Format("Row {0} = {1}", row, sheet.GetRow(row).GetCell(0).StringCellValue));
                 }
             }

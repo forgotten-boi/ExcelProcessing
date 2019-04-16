@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1.Models
+namespace ExcelProcessor.Models
 {
     public class XslUtil
     {
@@ -53,14 +53,18 @@ namespace WebApplication1.Models
                 using (DataTable Sheets = oledbConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null))
                 {
 
-                    for (int i = 0; i < Sheets.Rows.Count; i++)
+                    for (int i = 0; i < Sheets.Rows.Count - 2; i++)
                     {
                         string worksheets = Sheets.Rows[i]["TABLE_NAME"].ToString();
-                        OleDbCommand cmd = new OleDbCommand(String.Format("SELECT * FROM [{0}]", worksheets), oledbConn);
+                        OleDbCommand cmd = new OleDbCommand(String.Format("SELECT * FROM [{0}] Where [Unit of purchase] = 'EA'", worksheets), oledbConn);
                         OleDbDataAdapter oleda = new OleDbDataAdapter();
                         oleda.SelectCommand = cmd;
 
                         oleda.Fill(ds);
+
+                        DataSet dataSet = new DataSet();
+                        oleda.Fill(dataSet);
+
                     }
 
                     dt = ds.Tables[0];

@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ExcelProcessor.Models;
+using System.Diagnostics;
 
-namespace WebApplication1.Controllers
+namespace ExcelProcessor.Controllers
 {
     public class HomeController : Controller
     {
@@ -20,7 +22,7 @@ namespace WebApplication1.Controllers
             if (httpFileCollection.ContentLength > 0)
             {
                 string extension = System.IO.Path.GetExtension(httpFileCollection.FileName).ToLower();
-                string path = string.Format("{0}/{1}", Server.MapPath("~/ExcelData/Uploads"), Request.Files["FileUpload1"].FileName);
+                string path = string.Format("{0}/{1}", Server.MapPath("~/ExcelData/Uploads"), Request.Files["file"].FileName);
                 if (!Directory.Exists(path)) // if upload folder path does not exist, create one.
                 {
                     Directory.CreateDirectory(Server.MapPath("~/ExcelData/Uploads"));
@@ -34,6 +36,15 @@ namespace WebApplication1.Controllers
                         System.IO.File.Delete(path); // if file exist previously, delete previous one
                     }
                     httpFileCollection.SaveAs(path);
+
+                    var performance = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+                    Console.WriteLine(performance.NextValue());
+
+                    XslLibrary.ReadDataTable(path);
+                    Console.WriteLine(performance.NextValue());
+                    XslLibrary.ImportFromExcelNpoi(path);
+                    Console.WriteLine(performance.NextValue());
+
                 }
 
 

@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace WebApplication1
+namespace ExcelProcessor
 {
     public class BundleConfig
     {
