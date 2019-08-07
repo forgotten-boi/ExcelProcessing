@@ -28,6 +28,12 @@ namespace ExcelProcessor.Controllers
                     Directory.CreateDirectory(Server.MapPath("~/ExcelData/Uploads"));
                 }
 
+                var exportPath = path + "/Export";
+                if (!Directory.Exists(exportPath))
+                {
+                    Directory.CreateDirectory(Server.MapPath("~/ExcelData/Uploads/Export"));
+                }
+
                 string[] validFileTypes = { ".xls", ".xlsx", ".csv" };
                 if (validFileTypes.Contains(extension))
                 {
@@ -39,18 +45,20 @@ namespace ExcelProcessor.Controllers
 
                     var performance = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
                     Console.WriteLine(performance.NextValue());
-
+                    var a = performance.NextValue();
                     XslLibrary.ReadDataTable(path);
                     Console.WriteLine(performance.NextValue());
-                    XslLibrary.ImportFromExcelNpoi(path);
-                    Console.WriteLine(performance.NextValue());
-
+                    // var b = performance.NextValue();
+                    // XslLibrary.ImportFromExcelNpoi(path);
+                    // Console.WriteLine(performance.NextValue());
+                    // var c = performance.NextValue();
+                    // TempData["Success"] = $"a: {a} B: {b} c: {c}";
                 }
 
 
             }
-            TempData["Success"] = "Success";
-            return new ContentResult();
+           
+            return View("Index");
         }
         public ActionResult About()
         {

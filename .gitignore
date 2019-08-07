@@ -9,3 +9,5 @@
 /packages
 /.vs/WebApplication1
 /.vs/ExcelProcessing
+/ExcelConsole/obj/Debug
+/ExcelConsole/bin/Debug
